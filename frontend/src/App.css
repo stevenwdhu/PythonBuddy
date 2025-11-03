@@ -1,0 +1,236 @@
+/* App specific styles for PythonBuddy */
+
+.App {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  color: white;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: white;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+.examples {
+  color: white;
+}
+
+.examples a {
+  color: white;
+  cursor: pointer;
+  text-decoration: underline;
+  margin: 0 5px;
+}
+
+.examples a:hover {
+  color: #ddd;
+}
+
+.editor-container {
+  margin-bottom: 30px;
+}
+
+.CodeMirror {
+  -webkit-box-shadow: 5px 5px 20px 8px rgba(62,132,189,1);
+  -moz-box-shadow: 5px 5px 20px 8px rgba(62,132,189,1);
+  box-shadow: 5px 5px 20px 8px rgba(62,132,189,1);
+  font-family: 'Inconsolata', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  border-radius: 4px;
+  min-height: 300px;
+}
+
+.CodeMirror-lines {
+  padding: 4px 0;
+}
+
+.CodeMirror-line {
+  line-height: 1.4;
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid #ddd;
+  background-color: #f7f7f7;
+  white-space: nowrap;
+}
+
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #999;
+  line-height: 1.4;
+}
+
+.controls {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.run-button {
+  background-color: #5cb85c;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-family: 'Inconsolata', monospace;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.run-button:hover:not(:disabled) {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.run-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.output-container {
+  margin: 30px 0;
+  color: white;
+}
+
+.output-container h3 {
+  margin-bottom: 15px;
+}
+
+.output {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 15px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  font-family: 'Inconsolata', monospace;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.output.error {
+  border-color: #d9534f;
+  background-color: rgba(217, 83, 79, 0.1);
+}
+
+.errors-container {
+  color: white;
+  margin: 30px 0;
+}
+
+.errors-container h2 {
+  margin-bottom: 20px;
+}
+
+.no-errors {
+  color: #5cb85c;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.errors-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.errors-table th,
+.errors-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.errors-table th {
+  background-color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
+
+.errors-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.severity-error {
+  background-color: #d9534f;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.severity-warning {
+  background-color: #f0ad4e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+footer {
+  text-align: center;
+  color: white;
+  margin-top: auto;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+  
+  .header h1 {
+    font-size: 2em;
+  }
+  
+  .run-button {
+    padding: 12px 24px;
+    font-size: 18px;
+  }
+  
+  .errors-table {
+    font-size: 0.9em;
+  }
+  
+  .errors-table th,
+  .errors-table td {
+    padding: 8px 10px;
+  }
+}
+

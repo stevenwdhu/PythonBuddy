@@ -1,0 +1,49 @@
+/* Import Google Fonts first */
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+
+/* Base styles for PythonBuddy */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inconsolata', monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #428bca !important;
+  color: white !important;
+  min-height: 100vh;
+}
+
+code {
+  font-family: 'Inconsolata', monospace;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ddd;
+}
+
+/* Reset some default styles */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Ensure proper styling for the root element */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
