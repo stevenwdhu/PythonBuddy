@@ -23,7 +23,7 @@ const examples = {
   7: "# Fibonacci\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)\n\nfor i in range(10):\n    print(fib(i))\n"
 };
 
-const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+const API_BASE = '';
 
 function App() {
   const [code, setCode] = useState("def foo(bar, baz):\n    pass\nfoo(42)\n");
