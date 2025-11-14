@@ -39,7 +39,7 @@ def get_session_id():
     return request.headers.get('X-Session-ID', 'default')
 
 
-@app.route('/health', methods=['GET'])
+@app.route('/api/health', methods=['GET'])
 def health():
     """Health check endpoint"""
     return jsonify({"status": "healthy"}), 200

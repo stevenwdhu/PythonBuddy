@@ -36,8 +36,6 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          build-args: |
-            VITE_API_BASE=http://ip-10-1-2-218.ec2.internal:5000
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/pythonbuddy-frontend:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/pythonbuddy-frontend:${{ github.sha }}
