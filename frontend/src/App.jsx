@@ -23,7 +23,7 @@ const examples = {
   7: "# Fibonacci\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)\n\nfor i in range(10):\n    print(fib(i))\n"
 };
 
-const API_BASE = '';
+const API_BASE = 'http://MyALB-743698351.us-east-1.elb.amazonaws.com';
 
 function App() {
   const [code, setCode] = useState("def foo(bar, baz):\n    pass\nfoo(42)\n");
