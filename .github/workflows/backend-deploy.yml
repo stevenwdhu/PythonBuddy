@@ -60,8 +60,35 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Trigger ASG Instance Refresh
+      - name: Deploy to ASG via SSM
         run: |
-          aws autoscaling start-instance-refresh \
-            --auto-scaling-group-name MyAutoScalingGroup \
-            --preferences '{"MinHealthyPercentage":90,"InstanceWarmup":300}'
+          INSTANCE_IDS=$(aws autoscaling describe-auto-scaling-groups \
+            --auto-scaling-group-names MyAutoScalingGroup \
+            --query 'AutoScalingGroups[0].Instances[?HealthStatus==`Healthy`].InstanceId' \
+            --output text)
+          
+          if [ -z "$INSTANCE_IDS" ]; then
+            echo "No healthy instances found"
+            exit 1
+          fi
+          
+          COMMAND_ID=$(aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --instance-ids $INSTANCE_IDS \
+            --parameters 'commands=[
+              "echo Starting backend deployment...",
+              "docker pull stevenwdhu/pythonbuddy-backend:latest",
+              "docker stop pythonbuddy-backend || true",
+              "docker rm pythonbuddy-backend || true",
+              "docker run -d --name pythonbuddy-backend --restart always -p 80:5000 -v /var/run/docker.sock:/var/run/docker.sock stevenwdhu/pythonbuddy-backend:latest",
+              "echo Deployment completed"
+            ]' \
+            --output text \
+            --query 'Command.CommandId')
+          
+          echo "Waiting for deployment to complete..."
+          aws ssm wait command-executed \
+            --command-id $COMMAND_ID \
+            --instance-id $(echo $INSTANCE_IDS | awk '{print $1}')
+          
+          echo "Deployment successful!"
