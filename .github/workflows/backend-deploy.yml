@@ -62,19 +62,9 @@ jobs:
 
       - name: Deploy to ASG via SSM
         run: |
-          INSTANCE_IDS=$(aws autoscaling describe-auto-scaling-groups \
-            --auto-scaling-group-names MyAutoScalingGroup \
-            --query 'AutoScalingGroups[0].Instances[?HealthStatus==`Healthy`].InstanceId' \
-            --output text)
-          
-          if [ -z "$INSTANCE_IDS" ]; then
-            echo "No healthy instances found"
-            exit 1
-          fi
-          
           COMMAND_ID=$(aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --instance-ids $INSTANCE_IDS \
+            --targets "Key=tag:aws:autoscaling:groupName,Values=MyAutoScalingGroup" \
             --parameters 'commands=[
               "echo Starting backend deployment...",
               "docker pull stevenwdhu/pythonbuddy-backend:latest",
@@ -86,9 +76,8 @@ jobs:
             --output text \
             --query 'Command.CommandId')
           
-          echo "Waiting for deployment to complete..."
-          aws ssm wait command-executed \
+          aws ssm list-command-invocations \
             --command-id $COMMAND_ID \
-            --instance-id $(echo $INSTANCE_IDS | awk '{print $1}')
+            --details
           
           echo "Deployment successful!"
