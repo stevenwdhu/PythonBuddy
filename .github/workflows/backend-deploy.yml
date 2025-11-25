@@ -62,22 +62,8 @@ jobs:
 
       - name: Deploy to ASG via SSM
         run: |
-          COMMAND_ID=$(aws ssm send-command \
+          aws ssm send-command \
             --document-name "AWS-RunShellScript" \
             --targets "Key=tag:aws:autoscaling:groupName,Values=MyAutoScalingGroup" \
-            --parameters 'commands=[
-              "echo Starting backend deployment...",
-              "docker pull stevenwdhu/pythonbuddy-backend:latest",
-              "docker stop pythonbuddy-backend || true",
-              "docker rm pythonbuddy-backend || true",
-              "docker run -d --name pythonbuddy-backend --restart always -p 80:5000 -v /var/run/docker.sock:/var/run/docker.sock stevenwdhu/pythonbuddy-backend:latest",
-              "echo Deployment completed"
-            ]' \
-            --output text \
-            --query 'Command.CommandId')
-          
-          aws ssm list-command-invocations \
-            --command-id $COMMAND_ID \
-            --details
-          
-          echo "Deployment successful!"
+            --comment "Deploy pythonbuddy-backend" \
+            --parameters commands="docker pull stevenwdhu/pythonbuddy-backend:latest && docker stop pythonbuddy-backend || true && docker rm pythonbuddy-backend || true && docker run -d --name pythonbuddy-backend --restart always -p 80:5000 -v /var/run/docker.sock:/var/run/docker.sock stevenwdhu/pythonbuddy-backend:latest"
