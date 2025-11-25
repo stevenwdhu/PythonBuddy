@@ -60,38 +60,8 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy Backend to EC2 via SSM
-        id: deploy
+      - name: Trigger ASG Instance Refresh
         run: |
-          # Send deployment command to PRIVATE EC2 instance via Systems Manager
-          COMMAND_ID=$(aws ssm send-command \
-            --instance-ids "${{ secrets.EC2_BACKEND_INSTANCE_ID }}" \
-            --document-name "AWS-RunShellScript" \
-            --comment "Deploy latest pythonbuddy-backend Docker image from GitHub Actions" \
-            --parameters 'commands=[
-              "echo \"Starting backend deployment process...\"",
-              "docker pull ${{ secrets.DOCKERHUB_USERNAME }}/pythonbuddy-backend:latest",
-              "docker stop pythonbuddy-backend || true",
-              "docker rm pythonbuddy-backend || true",
-              "docker run -d --name pythonbuddy-backend -p 5000:5000 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/pythonbuddy-backend:latest",
-              "echo \"Backend deployment completed successfully!\""
-            ]' \
-            --output text \
-            --query "Command.CommandId")
-
-          echo "command-id=$COMMAND_ID" >> $GITHUB_OUTPUT
-          echo "Deployment command sent with ID: $COMMAND_ID"
-
-      - name: Verify deployment command
-        run: |
-          echo "Waiting for command to be processed..."
-          sleep 5
-
-          # Check command status
-          aws ssm get-command-invocation \
-            --command-id "${{ steps.deploy.outputs.command-id }}" \
-            --instance-id "${{ secrets.EC2_BACKEND_INSTANCE_ID }}" \
-            --query '[Status, StatusDetails]' \
-            --output text || echo "Command is still in progress. Check AWS Systems Manager Console for details."
-
-          echo "Deployment verification complete. View full details in AWS Systems Manager > Run Command"
+          aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name MyAutoScalingGroup \
+            --preferences MinHealthyPercentage=50,InstanceWarmup=300
