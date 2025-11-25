@@ -38,6 +38,14 @@ jobs:
         working-directory: ./frontend
         run: pnpm run build
 
+      # Verify build output
+      - name: Verify build output
+        run: |
+          echo "Checking if dist folder exists..."
+          ls -la frontend/
+          echo "Contents of dist folder:"
+          ls -la frontend/dist/
+
       # Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -50,4 +58,12 @@ jobs:
       # Upload to S3
       - name: Upload to S3
         run: |
+          echo "Uploading files to S3 bucket: ${{ secrets.S3_BUCKET_NAME }}"
           aws s3 sync frontend/dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
+          echo "Upload complete!"
+
+      # Verify S3 upload
+      - name: Verify S3 contents
+        run: |
+          echo "Contents of S3 bucket:"
+          aws s3 ls s3://${{ secrets.S3_BUCKET_NAME }} --recursive
